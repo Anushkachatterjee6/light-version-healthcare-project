@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Image Analysis Studio — SIFT + RANSAC and CNN | HER</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/styles.css" />
+  <link rel="stylesheet" href="/static/studio-cnn.css" />
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <header class="topbar">
+    <div class="brand">HER <span>Biomedical Imaging</span></div>
+    <nav>
+      <a href="/">Tutorials</a>
+      <a class="active-link" href="/image-analysis">Image Analysis</a>
+    </nav>
+  </header>
+
+  <main class="analysis-wrap">
+    <nav class="studio-workflows" aria-label="Studio workflows">
+      <a href="#sift-analysis">SIFT + RANSAC</a>
+      <a href="#cnn-analysis">CNN Analysis</a>
+    </nav>
+    <section class="panel controls-panel" id="sift-analysis">
+      <p class="eyebrow">T5 — Biomedical Image Analysis</p>
+      <h1>IMAGE ANALYSIS — SIFT + RANSAC</h1>
+      <p class="explain">
+        SIFT detects distinctive local features in the MRI images.
+        RANSAC removes geometrically inconsistent feature matches and
+        retains robust correspondences.
+      </p>
+
+      <div class="controls-grid">
+        <label>
+          Patient / Case
+          <select id="caseSelect"></select>
+        </label>
+        <label>
+          Modality
+          <select id="modalitySelect"></select>
+        </label>
+        <label>
+          Slice 1
+          <input id="slice1" type="number" min="0" value="0" />
+        </label>
+        <label>
+          Slice 2
+          <input id="slice2" type="number" min="0" value="2" />
+        </label>
+      </div>
+
+      <div class="cta-row">
+        <button id="runBtn" class="btn primary">Run SIFT + RANSAC Analysis</button>
+        <span id="sliceHint" class="hint"></span>
+      </div>
+      <p id="statusMsg" class="status" role="status"></p>
+    </section>
+
+    <section class="panel doc-panel">
+      <h2>Pipeline</h2>
+      <p class="pipeline">
+        MRI slices → preprocessing → SIFT keypoints → descriptors →
+        feature matching → RANSAC → inlier matches → visualization
+      </p>
+      <div class="doc-cols">
+        <div>
+          <h3>SIFT</h3>
+          <p>Scale-Invariant Feature Transform detects local distinctive features and creates descriptors.</p>
+        </div>
+        <div>
+          <h3>RANSAC</h3>
+          <p>Random Sample Consensus identifies geometrically consistent matches and rejects outliers.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel results hidden" id="results">
+      <div class="stats" id="stats"></div>
+
+      <h2>Original MRI</h2>
+      <div class="pair">
+        <figure>
+          <figcaption>Original Slice 1</figcaption>
+          <img id="orig1" alt="Original MRI slice 1" />
+        </figure>
+        <figure>
+          <figcaption>Original Slice 2</figcaption>
+          <img id="orig2" alt="Original MRI slice 2" />
+        </figure>
+      </div>
+
+      <h2>SIFT Keypoints</h2>
+      <div class="pair">
+        <figure>
+          <figcaption>SIFT Keypoints — Slice 1</figcaption>
+          <img id="sift1" alt="SIFT keypoints on slice 1" />
+        </figure>
+        <figure>
+          <figcaption>SIFT Keypoints — Slice 2</figcaption>
+          <img id="sift2" alt="SIFT keypoints on slice 2" />
+        </figure>
+      </div>
+
+      <h2>SIFT Feature Matches</h2>
+      <figure class="wide">
+        <figcaption>Good SIFT Matches (after Lowe ratio test)</figcaption>
+        <img id="matches" alt="SIFT feature matches" />
+      </figure>
+
+      <h2 class="hero-result-title">RANSAC Inlier Matches</h2>
+      <figure class="wide hero-result">
+        <figcaption>Final robust correspondences retained by RANSAC</figcaption>
+        <img id="ransac" alt="RANSAC inlier matches" />
+      </figure>
+    </section>
+    <section class="panel studio-cnn" id="cnn-analysis" aria-labelledby="cnnHeading">
+      <p class="eyebrow">T5 — CNN classification</p>
+      <h2 id="cnnHeading">CNN Analysis</h2>
+      <p class="explain">Run the same compact training and evaluation workflow as the tutorials dashboard, using local cases with both FLAIR MRI and reference segmentation labels.</p>
+      <div class="doc-cols">
+        <div><h3>Input and training</h3><p>Cases and slices are selected automatically from the local labeled dataset. The existing demo uses 32 × 32 model inputs, up to eight sampled slices per case and three training epochs, with different patients reserved for validation.</p></div>
+        <div><h3>Classification output</h3><p>Displays actual input images, available reference masks, class labels and model scores. This classifier does not generate segmentation masks. Each run trains a fresh demo model; saved weights are not loaded or changed.</p></div>
+      </div>
+      <p class="hint">The SIFT case/modality/slice selectors apply only to SIFT. This CNN endpoint does not accept uploads or a single selected image; no uploaded image is silently replaced with demo data. Dataset and training settings are fixed by the existing endpoint.</p>
+      <div class="cta-row"><button id="cnnStudioRun" type="button" class="btn primary" aria-describedby="cnnStudioStatus">Train &amp; evaluate CNN</button></div>
+      <p id="cnnStudioStatus" class="status" role="status" aria-live="polite">Ready to run the local labeled-data CNN experiment.</p>
+      <div id="cnnStudioResults" class="studio-cnn-results" hidden aria-busy="false"></div>
+    </section>
+  </main>
+
+  <script src="/static/image-analysis.js"></script>
+  <script src="/static/results-renderer.js"></script>
+  <script src="/static/studio-cnn.js"></script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+{
+  "model_version": "brats-flair-slice-cnn-v1",
+  "architecture": "make_tumor_cnn Conv32/64/128 sigmoid",
+  "input_shape": [
+    128,
+    128,
+    1
+  ],
+  "modality": "FLAIR",
+  "class_mapping": {
+    "0": "No Tumor",
+    "1": "Tumor Present"
+  },
+  "preprocessing": [
+    "clean NaN/Inf",
+    "center crop 160x160 for >=160px slices",
+    "per-slice min-max normalization",
+    "resize 128x128",
+    "single channel"
+  ],
+  "dataset": "local BraTS2020",
+  "split": {
+    "test_case_ids": [
+      "BraTS20_Training_318"
+    ],
+    "validation_case_ids": [
+      "BraTS20_Training_306"
+    ],
+    "training_case_ids": [
+      "BraTS20_Training_457",
+      "BraTS20_Training_449",
+      "BraTS20_Training_218",
+      "BraTS20_Training_206"
+    ]
+  },
+  "slice_counts": {
+    "train": 132,
+    "validation": 35,
+    "test": 35
+  },
+  "train_class_counts": [
+    56,
+    76
+  ],
+  "class_weight": {
+    "0": 1.1785714285714286,
+    "1": 0.868421052631579
+  },
+  "seed": 42,
+  "max_slices_per_case": 40,
+  "epochs_requested": 12
+}

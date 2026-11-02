@@ -1,0 +1,49 @@
+{
+  "test_accuracy": 0.6285714285714286,
+  "precision_recall_f1": {
+    "No Tumor": {
+      "precision": 0.4782608695652174,
+      "recall": 0.9166666666666666,
+      "f1-score": 0.6285714285714286,
+      "support": 12.0
+    },
+    "Tumor Present": {
+      "precision": 0.9166666666666666,
+      "recall": 0.4782608695652174,
+      "f1-score": 0.6285714285714286,
+      "support": 23.0
+    },
+    "accuracy": 0.6285714285714286,
+    "macro avg": {
+      "precision": 0.697463768115942,
+      "recall": 0.697463768115942,
+      "f1-score": 0.6285714285714286,
+      "support": 35.0
+    },
+    "weighted avg": {
+      "precision": 0.7663561076604555,
+      "recall": 0.6285714285714286,
+      "f1-score": 0.6285714285714286,
+      "support": 35.0
+    }
+  },
+  "confusion_matrix": [
+    [
+      11,
+      1
+    ],
+    [
+      12,
+      11
+    ]
+  ],
+  "test_case_ids": [
+    "BraTS20_Training_318"
+  ],
+  "test_slice_count": 35,
+  "test_class_counts": [
+    12,
+    23
+  ],
+  "roc_auc": 0.9384057971014493
+}
